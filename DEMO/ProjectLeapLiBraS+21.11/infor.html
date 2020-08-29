@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .config  {
+            background-image: url("infor.jpg");
+            background-repeat: no-repeat;
+        }
+
+        .styleFinger {
+            width: 20px; 
+            height: 20px; 
+            background: gold; 
+            border-radius: 10px;
+            position: absolute; 
+        }
+
+        .styleBack {
+            width: 10vw; 
+            height: 3vw; 
+            background: brown; 
+            border-radius: 10px;
+            position: absolute;
+            color: aliceblue;
+            display: none;
+        }
+    </style>
+    <title>Info</title>
+    <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+    <script>
+    // Store frame for motion functions
+    var previousFrame = null;
+    var paused = false;
+    
+    // Setup Leap loop with frame callback function
+    var controllerOptions = {enableGestures: true};
+    
+    // to use HMD mode:
+    // controllerOptions.optimizeHMD = true;
+    
+    Leap.loop(controllerOptions, function(frame) {
+        if (paused) {
+            return; // Skip this update
+        }
+    
+        // Display Pointable (finger and tool) object data
+        var pointableOutput = document.getElementById("pointableData");
+        var pointableString = "";
+        if (frame.pointables.length > 0) {
+        var fingerTypeMap = ["Thumb", "Index finger", "Middle finger", "Ring finger", "Pinky finger"];
+        var boneTypeMap = ["Distal phalanx"];
+        for (var i = 0; i < frame.pointables.length; i++) {
+            var pointable = frame.pointables[i];
+    
+            pointableString += "<div style='width:250px; float:center; padding:5px'>";
+    
+            if (pointable.tool) {
+                // tools
+            }
+            else {
+                // pointableString += "Type Finger: " + fingerTypeMap[pointable.type] + "<br />";
+
+                pointable.bones.forEach( function(bone){
+                            
+                    for (var i= 0; i < frame.hands.length; i++) {
+
+                        /* config frames of the hand and dimension of the screen
+                        */
+
+                        var hand  = frame.hands[i];
+                        var width = document.all[0].clientWidth;
+                        var height= document.all[0].clientHeight*2;
+                        var spaceHand= 2;
+
+                        /* button back
+                        */
+
+                        var back= document.getElementById('btnBack');
+                        posXBack= parseInt(back.style.left.replace('px', ''));
+                        posYBack= parseInt(back.style.top.replace('px', ''));
+                        back.style.left= (width/3.5)-(back.clientWidth/2)+'px';
+                        back.style.top = (height/2.4)-(back.clientHeight/2)+'px';
+                        back.style.display= 'block';
+
+                        /* finger index to select
+                        */
+                
+                        if('Index finger' == fingerTypeMap[pointable.type]){   
+                            var posX= ((pointable.tipPosition[0]*spaceHand)+(width/2));
+                            var posY= ((height/2)-(pointable.tipPosition[1]*spaceHand));
+
+                            var finger2 = document.getElementById("finger2");
+
+                            finger2.style.top  = posY + "px";
+                            finger2.style.left = posX + "px";
+
+                            /* dimension area button back
+                            */
+                            
+                            if(posX >= posXBack && posX <= posXBack+back.clientWidth){
+                                if(posY >= posYBack && posY <= posYBack+back.clientHeight){
+                                    if(pointable.touchZone == "touching") {
+                                        window.location.href= 'menu.html';
+                                    }
+                                    back.style.background= 'purple';
+                                }
+                            }else{
+                                back.style.background= 'gold';
+                            }
+                        }
+                    }
+                });
+                pointableString += "</div>";
+            }
+        }
+        }
+        else {
+            pointableString += "<h3 id='msn' style='text-align: center; color: red'>:-) Por Favor Introduza um Movimento (-:</h3>";
+        }
+        pointableOutput.innerHTML = pointableString;
+    
+        // Store frame for motion functions
+        previousFrame = frame;
+    })
+    </script>
+</head>
+<body id="view" class="config">
+    <div id="main">        
+        <div id="pointableData"></div>               
+        <button id='btnBack' class="styleBack" style="display: none;">Voltar</button>
+        
+        <div id="finger2" class="styleFinger"></div>
+    </div>
+</body>
+</html>
+<script>
+    /*
+    config view
+    */
+    var x_view= document.all[0].clientWidth;
+    var y_view= document.all[0].clientHeight;
+    document.getElementById("view").style.backgroundSize= x_view+"px "+y_view+"px";
+</script>

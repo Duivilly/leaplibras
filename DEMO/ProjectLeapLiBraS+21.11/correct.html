@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .config  {
+            background-image: url("correct.jpg");
+            background-repeat: no-repeat;
+        }
+
+        .configBtn {
+            position: absolute;
+            background-color: gold;
+            color: white;
+        }
+
+        .styleFinger {
+            width: 20px; 
+            height: 20px; 
+            background: gold; 
+            border-radius: 10px;
+            position: absolute; 
+        }
+    </style>
+    <title>Correct</title>
+    <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+    <script>
+    // Store frame for motion functions
+    var previousFrame = null;
+    var paused = false;
+    
+    // Setup Leap loop with frame callback function
+    var controllerOptions = {enableGestures: true};
+    
+    // to use HMD mode:
+    // controllerOptions.optimizeHMD = true;
+    
+    Leap.loop(controllerOptions, function(frame) {
+        if (paused) {
+            return; // Skip this update
+        }
+    
+        // Display Pointable (finger and tool) object data
+        var pointableOutput = document.getElementById("pointableData");
+        var pointableString = "";
+        if (frame.pointables.length > 0) {
+        var fingerTypeMap = ["Thumb", "Index finger", "Middle finger", "Ring finger", "Pinky finger"];
+        var boneTypeMap = ["Distal phalanx"];
+        for (var i = 0; i < frame.pointables.length; i++) {
+            var pointable = frame.pointables[i];
+    
+            pointableString += "<div style='width:250px; float:center; padding:5px'>";
+    
+            if (pointable.tool) {
+                // tools
+            }
+            else {
+                // pointableString += "Type Finger: " + fingerTypeMap[pointable.type] + "<br />";
+
+                pointable.bones.forEach( function(bone){
+                            
+                    for (var i= 0; i < frame.hands.length; i++) {
+
+                        /* config frames of the hand and dimension of the screen
+                        */
+
+                        var hand  = frame.hands[i];
+                        var width = document.all[0].clientWidth;
+                        var height= document.all[0].clientHeight*2;
+                        var spaceHand= 2;
+
+                        /* finger index to select
+                        */
+                        var finger2 = document.getElementById("finger2");
+                
+                        if('Index finger' == fingerTypeMap[pointable.type]){   
+                            var posX= ((pointable.tipPosition[0]*spaceHand)+(width/2));
+                            var posY= ((height/2)-(pointable.tipPosition[1]*spaceHand));
+                            
+                            finger2.style.top  = posY + "px";
+                            finger2.style.left = posX + "px";
+                        }
+
+                        posX= parseInt(finger2.style.left.replace('px', ''));
+                        posY= parseInt(finger2.style.top.replace('px', ''));
+
+                            // select Next LiBraS
+                            var btn1= document.getElementById('btn1');
+                            var posXbtn1 = parseInt(btn1.style.left.replace('px', ''));
+                            var posYbtn1 = parseInt(btn1.style.top.replace('px', ''));
+                            
+                            if(posX >= posXbtn1 && posX <= posXbtn1+btn1.clientWidth){
+                                if(posY >= posYbtn1 && posY <= posYbtn1+btn1.clientHeight){
+                                    if(pointable.touchZone == "touching") {
+                                        window.location.href= 'options.html';
+                                    }
+                                    btn1.style.background= 'purple';
+                                }
+                            }else{
+                                btn1.style.background= 'gold';
+                            }
+
+                            // select Again LiBraS
+                            var btn2= document.getElementById('btn2');
+                            var posXbtn2 = parseInt(btn2.style.left.replace('px', ''));
+                            var posYbtn2 = parseInt(btn2.style.top.replace('px', ''));
+                            
+                            if(posX >= posXbtn2 && posX <= posXbtn2+btn2.clientWidth){
+                                if(posY >= posYbtn2 && posY <= posYbtn2+btn2.clientHeight){
+                                    if(pointable.touchZone == "touching") {
+                                        window.location.href= 'menu.html';
+                                    }
+                                    btn2.style.background= 'purple';
+                                }
+                            }else{
+                                btn2.style.background= 'gold';
+                            }
+                    }
+                });
+                pointableString += "</div>";
+            }
+        }
+        }
+        else {
+            pointableString += "<h3 id='msn' style='text-align: center; color: red'>:-) Por Favor Introduza um Movimento (-:</h3>";
+        }
+        pointableOutput.innerHTML = pointableString;
+    
+        // Store frame for motion functions
+        previousFrame = frame;
+    })
+    </script>
+</head>
+<body id="view" class="config">
+    <div id="main">        
+        <div id="pointableData"></div>               
+        <button id="btn1" class="configBtn">Options LiBraS</button>	
+        <button id="btn2" class="configBtn">Menu LiBraS</button>
+        
+        <div id="finger2" class="styleFinger"></div>
+    </div>
+</body>
+</html>
+<script>
+    /*
+    config view
+    */
+    var x_view= document.all[0].clientWidth;
+    var y_view= document.all[0].clientHeight;
+    document.getElementById("view").style.backgroundSize= x_view+"px "+y_view+"px";
+    console.log(x_view, y_view);
+
+    /*
+    config buttons responsive
+    */
+    var widthButton= x_view*0.2732;
+    var heightButton= y_view*0.0875;
+    var distanceButtons= y_view*0.0298;
+    var margin= y_view/12;
+
+    var btn1= document.getElementById("btn1");
+    btn1.style.height= heightButton + "px";
+    btn1.style.width= widthButton +"px";
+    btn1.style.top = (y_view/2)-(btn1.clientHeight/2)+heightButton+distanceButtons+margin+"px";
+    btn1.style.left= (x_view/2)-(btn1.clientWidth/2)+"px";
+    btn1.style.borderRadius= "30px 30px 30px 30px";
+    //btn1.style.backgroundColor= "Transparent";
+    //btn1.style.color= "Transparent";
+
+    var btn2= document.getElementById("btn2");
+    btn2.style.height= heightButton + "px";
+    btn2.style.width= widthButton +"px";
+    btn2.style.top = (y_view/2)-(btn2.clientHeight/2)+(heightButton*2)+(distanceButtons*2)+margin+"px";
+    btn2.style.left= (x_view/2)-(btn2.clientWidth/2)+"px";
+    btn2.style.borderRadius= "30px 30px 30px 30px";
+    //btn2.style.backgroundColor= "Transparent";
+    //btn2.style.color= "Transparent";
+</script>

@@ -1,0 +1,385 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .config  {
+            background-image: url("selected.jpg");
+            background-repeat: no-repeat;
+        }
+    
+        .configBtn {
+            position: absolute;
+            color: white;
+            font-size: 30px;
+            background-color: gold;
+        }
+    
+        .styleFinger {
+            width: 15px; 
+            height: 15px; 
+            background: gold; 
+            border-radius: 10px;
+            position: absolute; 
+        }
+    
+        .styleFingerModel {
+            width: 25px; 
+            height: 25px;
+            position: absolute; 
+            border-radius: 15px;
+        }
+    
+        .styleBack {
+            width: 10vw; 
+            height: 3vw; 
+            background: brown; 
+            border-radius: 10px;
+            position: absolute;
+            color: aliceblue;
+            display: none;
+        }
+    
+        .styleField {
+            background: darkolivegreen;
+            position: absolute;
+            display: none;
+        }
+    </style>
+    <title>0</title>
+    <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+
+    <script>
+    // Store frame for motion functions
+    var previousFrame = null;
+    var paused = false;
+    
+    // Setup Leap loop with frame callback function
+    var controllerOptions = {enableGestures: true};
+    
+    // to use HMD mode:
+    // controllerOptions.optimizeHMD = true;
+    
+    Leap.loop(controllerOptions, function(frame) {
+        if (paused) {
+            return; // Skip this update
+        }
+    
+        // Display Pointable (finger and tool) object data
+        var pointableOutput = document.getElementById("pointableData");
+        var pointableString = "";
+        if (frame.pointables.length > 0) {
+        var fingerTypeMap = ["Thumb", "Index finger", "Middle finger", "Ring finger", "Pinky finger"];
+        var boneTypeMap = ["Distal phalanx"];
+        for (var i = 0; i < frame.pointables.length; i++) {
+            var pointable = frame.pointables[i];
+    
+            pointableString += "<div style='width:250px; float:center; padding:5px'>";
+    
+            if (pointable.tool) {
+                // tools
+            }
+            else {
+                // pointableString += "Type Finger: " + fingerTypeMap[pointable.type] + "<br />";
+
+                pointable.bones.forEach( function(bone){
+                            
+                    for (var i= 0; i < frame.hands.length; i++) {
+
+                        /* config frames of the hand and dimension of the screen
+                        */
+
+                        var hand  = frame.hands[i];
+                        var width = document.all[0].clientWidth;
+                        var height= document.all[0].clientHeight*2;
+                        var spaceHand= 2;
+        
+                        /* palm of the hand left or right
+                        */
+                        
+                        var posX= ((hand.palmPosition[0]*spaceHand)+(width/2));
+                        var posY= ((height/2)-(hand.palmPosition[1]*spaceHand));
+        
+                        var palm = document.getElementById("palm");
+                        palm.style.left = posX + "px";
+                        palm.style.top  = posY + "px";
+
+                        var posXHand= posX;
+                        var posYHand= posY;
+
+                        /* field
+                        */
+
+                        var field= document.getElementById('field');
+                        field.style.width= width*0.5+'px';
+                        field.style.height= (height/2)*0.5+'px';
+                        field.style.left= (width/2)-(field.clientWidth/2)+'px';
+                        field.style.top= (height/4)-(field.clientHeight/2)+'px';
+
+                        /* button back
+                        */
+
+                        var back= document.getElementById('btnBack');
+                        posXBack= parseInt(back.style.left.replace('px', ''));
+                        posYBack= parseInt(back.style.top.replace('px', ''));
+                        back.style.left= (width/4)-(back.clientWidth/2)+'px';
+                        back.style.top = (height/4)-(back.clientHeight/2)+'px';
+                        back.style.display= 'block';
+
+                        /* points references
+                        */ 
+
+                        var pointReferencePalmX   = 488; var pointReferencePalmY   = 323;
+                        var pointReferenceFinger1X= 393; var pointReferenceFinger1Y= 321;
+                        var pointReferenceFinger2X= 385; var pointReferenceFinger2Y= 282;
+                        var pointReferenceFinger3X= 398; var pointReferenceFinger3Y= 283;
+                        var pointReferenceFinger4X= 420; var pointReferenceFinger4Y= 292;
+                        var pointReferenceFinger5X= 448; var pointReferenceFinger5Y= 299;
+
+                        /* center to finger models
+                        */
+
+                        var pamlModel = document.getElementById('palmModel');
+                        pamlModel.style.left= (width/2)-(pamlModel.clientWidth/2)+'px';
+                        pamlModel.style.top = (height/3)-(pamlModel.clientHeight/2)+'px';
+
+                        var finger1Model = document.getElementById("finger1Model");
+                        var calibreFinger1X= pointReferencePalmX-pointReferenceFinger1X;
+                        var calibreFinger1Y= pointReferencePalmY-pointReferenceFinger1Y;
+                        finger1Model.style.left= (width/2)-(calibreFinger1X)-(finger1Model.clientWidth/2)+'px';
+                        finger1Model.style.top = (height/3)-(calibreFinger1Y)-(finger1Model.clientHeight/2)+'px';
+
+                        var finger2Model = document.getElementById("finger2Model");
+                        var calibreFinger2X= pointReferencePalmX-pointReferenceFinger2X;
+                        var calibreFinger2Y= pointReferencePalmY-pointReferenceFinger2Y;
+                        finger2Model.style.left= (width/2)-(calibreFinger2X)-(finger2Model.clientWidth/2)+'px';
+                        finger2Model.style.top = (height/3)-(calibreFinger2Y)-(finger2Model.clientHeight/2)+'px';
+
+                        var finger3Model = document.getElementById("finger3Model");
+                        var calibreFinger3X= pointReferencePalmX-pointReferenceFinger3X;
+                        var calibreFinger3Y= pointReferencePalmY-pointReferenceFinger3Y;
+                        finger3Model.style.left= (width/2)-(calibreFinger3X)-(finger3Model.clientWidth/2)+'px';
+                        finger3Model.style.top = (height/3)-(calibreFinger3Y)-(finger3Model.clientHeight/2)+'px';
+
+                        var finger4Model = document.getElementById("finger4Model");
+                        var calibreFinger4X= pointReferencePalmX-pointReferenceFinger4X;
+                        var calibreFinger4Y= pointReferencePalmY-pointReferenceFinger4Y;
+                        finger4Model.style.left= (width/2)-(calibreFinger4X)-(finger4Model.clientWidth/2)+'px';
+                        finger4Model.style.top = (height/3)-(calibreFinger4Y)-(finger4Model.clientHeight/2)+'px';
+
+                        var finger5Model = document.getElementById("finger5Model");
+                        var calibreFinger5X= pointReferencePalmX-pointReferenceFinger5X;
+                        var calibreFinger5Y= pointReferencePalmY-pointReferenceFinger5Y;
+                        finger5Model.style.left= (width/2)-(calibreFinger5X)-(finger5Model.clientWidth/2)+'px';
+                        finger5Model.style.top = (height/3)-(calibreFinger5Y)-(finger5Model.clientHeight/2)+'px';
+                        
+                        /* flag to all selected
+                        */
+                        var flag1= false;
+                        var flag2= false;
+                        var flag3= false;
+                        var flag4= false;
+                        var flag5= false;                        
+                        var flag6= false;
+
+                        /* dimension area palm hand
+                        */
+
+                        pamlModelX= parseInt(pamlModel.style.left.replace('px', ''));;
+                        pamlModelY= parseInt(pamlModel.style.top.replace('px', ''));;
+
+                        if(posXHand >= pamlModelX && posXHand <= pamlModelX+pamlModel.clientWidth){
+                            if(posYHand >= pamlModelY && posYHand <= pamlModelY+pamlModel.clientHeight){
+                                flag6= true;
+                            }
+                        }
+
+                        /* draw points of the hand
+                        */
+
+                        var finger1 = document.getElementById("finger1");
+                        var finger2 = document.getElementById("finger2");
+                        var finger3 = document.getElementById("finger3");
+                        var finger4 = document.getElementById("finger4");
+                        var finger5 = document.getElementById("finger5");
+
+                        if('Thumb' == fingerTypeMap[pointable.type]){   
+                            var posX= ((pointable.tipPosition[0]*spaceHand)+(width/2));
+                            var posY= ((height/2)-(pointable.tipPosition[1]*spaceHand));
+        
+                            finger1.style.top  = posY + "px";
+                            finger1.style.left = posX + "px";
+                        }
+        
+                        if('Index finger' == fingerTypeMap[pointable.type]){   
+                            var posX= ((pointable.tipPosition[0]*spaceHand)+(width/2));
+                            var posY= ((height/2)-(pointable.tipPosition[1]*spaceHand));
+                            
+                            finger2.style.top  = posY + "px";
+                            finger2.style.left = posX + "px";
+
+                            /* dimension area button back
+                            */
+                            
+                            if(posX >= posXBack && posX <= posXBack+back.clientWidth){
+                                if(posY >= posYBack && posY <= posYBack+back.clientHeight){
+                                    if(pointable.touchZone == "touching") {
+                                        window.location.href= '/ProjectLeapLiBraS+21.11/menu.html';
+                                    }
+                                    back.style.background= 'purple';
+                                }
+                            }else{
+                                back.style.background= 'gold';
+                            }
+                        }
+        
+                        if('Middle finger' == fingerTypeMap[pointable.type]){   
+                            var posX= ((pointable.tipPosition[0]*spaceHand)+(width/2));
+                            var posY= ((height/2)-(pointable.tipPosition[1]*spaceHand));
+                            
+                            finger3.style.top  = posY + "px";
+                            finger3.style.left = posX + "px";
+                        }
+        
+                        if('Ring finger' == fingerTypeMap[pointable.type]){   
+                            var posX= ((pointable.tipPosition[0]*spaceHand)+(width/2));
+                            var posY= ((height/2)-(pointable.tipPosition[1]*spaceHand));
+                            
+                            finger4.style.top  = posY + "px";
+                            finger4.style.left = posX + "px";
+                        }
+        
+                        if('Pinky finger' == fingerTypeMap[pointable.type]){   
+                            var posX= ((pointable.tipPosition[0]*spaceHand)+(width/2));
+                            var posY= ((height/2)-(pointable.tipPosition[1]*spaceHand));
+                            
+                            finger5.style.top  = posY + "px";
+                            finger5.style.left = posX + "px";
+                        }
+
+                        /* all flags are selected
+                        */
+
+                        /* dimension area finger 1
+                        */
+                        posXFinger1= parseInt(finger1.style.left.replace('px', ''));;
+                        posYFinger1= parseInt(finger1.style.top.replace('px', ''));;
+
+                        posXFinger1Model= parseInt(finger1Model.style.left.replace('px', ''));;
+                        posYFinger1Model= parseInt(finger1Model.style.top.replace('px', ''));;
+
+                        if(posXFinger1 >= posXFinger1Model && posXFinger1 <= posXFinger1Model+finger1Model.clientWidth){
+                            if(posYFinger1 >= posYFinger1Model && posYFinger1 <= posYFinger1Model+finger1Model.clientHeight){
+                                flag1= true;
+                            }
+                        }
+
+                        /* dimension area finger 2
+                        */
+                        posXFinger2= parseInt(finger2.style.left.replace('px', ''));;
+                        posYFinger2= parseInt(finger2.style.top.replace('px', ''));;
+
+                        posXFinger2Model= parseInt(finger2Model.style.left.replace('px', ''));;
+                        posYFinger2Model= parseInt(finger2Model.style.top.replace('px', ''));;
+
+                        if(posXFinger2 >= posXFinger2Model && posXFinger2 <= posXFinger2Model+finger2Model.clientWidth){
+                            if(posYFinger2 >= posYFinger2Model && posYFinger2 <= posYFinger2Model+finger2Model.clientHeight){
+                                flag2= true;
+                            }
+                        }
+
+                        /* dimension area finger 3
+                        */
+                        posXFinger3= parseInt(finger3.style.left.replace('px', ''));;
+                        posYFinger3= parseInt(finger3.style.top.replace('px', ''));;
+
+                        posXFinger3Model= parseInt(finger3Model.style.left.replace('px', ''));;
+                        posYFinger3Model= parseInt(finger3Model.style.top.replace('px', ''));;
+
+                        if(posXFinger3 >= posXFinger3Model && posXFinger3 <= posXFinger3Model+finger3Model.clientWidth){
+                            if(posYFinger3 >= posYFinger3Model && posYFinger3 <= posYFinger3Model+finger3Model.clientHeight){
+                                flag3= true;
+                            }
+                        }
+
+                        /* dimension area finger 4
+                        */
+                        posXFinger4= parseInt(finger4.style.left.replace('px', ''));;
+                        posYFinger4= parseInt(finger4.style.top.replace('px', ''));;
+
+                        posXFinger4Model= parseInt(finger4Model.style.left.replace('px', ''));;
+                        posYFinger4Model= parseInt(finger4Model.style.top.replace('px', ''));;
+
+                        if(posXFinger4 >= posXFinger4Model && posXFinger4 <= posXFinger4Model+finger4Model.clientWidth){
+                            if(posYFinger4 >= posYFinger4Model && posYFinger4 <= posYFinger4Model+finger4Model.clientHeight){
+                                flag4= true;
+                            }
+                        }
+
+                        /* dimension area finger 5
+                        */
+                        posXFinger5= parseInt(finger5.style.left.replace('px', ''));;
+                        posYFinger5= parseInt(finger5.style.top.replace('px', ''));;
+
+                        posXFinger5Model= parseInt(finger5Model.style.left.replace('px', ''));;
+                        posYFinger5Model= parseInt(finger5Model.style.top.replace('px', ''));;
+
+                        if(posXFinger5 >= posXFinger5Model && posXFinger5 <= posXFinger5Model+finger5Model.clientWidth){
+                            if(posYFinger5 >= posYFinger5Model && posYFinger5 <= posYFinger5Model+finger5Model.clientHeight){
+                                flag5= true;
+                            }
+                        }
+
+                        /* active finger. ignore palm hand (flag6)
+                        */
+
+                        if(flag1 && flag2 && flag3 && flag4 && flag5){
+                            window.location.href= '/ProjectLeapLiBraS+21.11/correct.html';
+                        }
+                    }
+                });
+                pointableString += "</div>";
+            }
+        }
+        }
+        else {
+            pointableString += "<h3 id='msn' style='text-align: center; color: #FF69B4'>:-) Aproxime seus dedos do Leap Motion (-:</h3>";
+        }
+        pointableOutput.innerHTML = pointableString;
+    
+        // Store frame for motion functions
+        previousFrame = frame;
+    })
+    </script>
+</head>
+<body id="view" class="config">
+    <div id="main">        
+        <div id="pointableData"></div>  
+
+        <button id='btnBack' class="styleBack">Voltar</button>
+
+        <div id="field" class="styleField"></div>
+        
+        <div id="palm" class="styleFinger" style="background: black;"></div>
+        <div id="finger1" class="styleFinger" style="background: brown;"></div>
+        <div id="finger2" class="styleFinger" style="background: chartreuse;"></div>
+        <div id="finger3" class="styleFinger" style="background: darkorchid;"></div>
+        <div id="finger4" class="styleFinger" style="background: gold;"></div>
+        <div id="finger5" class="styleFinger" style="background: darkblue;"></div>   
+        
+        <div id="palmModel" style="background: black;" class="styleFingerModel"></div>
+        <div id="finger1Model" style="background: brown;" class="styleFingerModel"></div>
+        <div id="finger2Model" style="background: chartreuse;" class="styleFingerModel"></div>
+        <div id="finger3Model" style="background: darkorchid;" class="styleFingerModel"></div>
+        <div id="finger4Model" style="background: gold;" class="styleFingerModel"></div>
+        <div id="finger5Model" style="background: darkblue;" class="styleFingerModel"></div>   
+    </div>
+</body>
+</html>
+<script>
+    /*
+    config view
+    */
+    var x_view= document.all[0].clientWidth;
+    var y_view= document.all[0].clientHeight;
+    document.getElementById("view").style.backgroundSize= x_view+"px "+y_view+"px";
+</script>

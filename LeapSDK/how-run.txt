@@ -1,0 +1,6 @@
+#install
+sudo apt-get install swig g++ libpython3.5-dev
+
+#to run
+LD_PRELOAD=./libLeap.so python3.5 Sample.py
+

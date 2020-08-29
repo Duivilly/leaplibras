@@ -1,0 +1,1135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+        .config  {
+            background-image: url("options.jpg");
+            background-repeat: no-repeat;
+        }
+
+        .styleFinger {
+            width: 20px; 
+            height: 20px; 
+            background: gold; 
+            border-radius: 10px;
+            position: absolute; 
+        }
+
+        .styleBack {
+            width: 10vw; 
+            height: 3vw; 
+            background: brown; 
+            border-radius: 10px;
+            position: absolute;
+            color: aliceblue;
+            display: none;
+        }
+
+        .btnsOptions {
+            width: 60px;
+            height: 40px;
+            display: none;
+            position: absolute;
+            /*border-radius: 15px;*/
+        }
+    </style>
+    <title>Options</title>
+    <script src="http://js.leapmotion.com/leap-0.6.3.min.js"></script>
+    <script>
+    // Store frame for motion functions
+    var previousFrame = null;
+    var paused = false;
+    
+    // Setup Leap loop with frame callback function
+    var controllerOptions = {enableGestures: true};
+    
+    // to use HMD mode:
+    // controllerOptions.optimizeHMD = true;
+    
+    Leap.loop(controllerOptions, function(frame) {
+        if (paused) {
+            return; // Skip this update
+        }
+    
+        // Display Pointable (finger and tool) object data
+        var pointableOutput = document.getElementById("pointableData");
+        var pointableString = "";
+        if (frame.pointables.length > 0) {
+        var fingerTypeMap = ["Thumb", "Index finger", "Middle finger", "Ring finger", "Pinky finger"];
+        var boneTypeMap = ["Distal phalanx"];
+        for (var i = 0; i < frame.pointables.length; i++) {
+            var pointable = frame.pointables[i];
+    
+            pointableString += "<div style='width:250px; float:center; padding:5px'>";
+    
+            if (pointable.tool) {
+                // tools
+            }
+            else {
+                // pointableString += "Type Finger: " + fingerTypeMap[pointable.type] + "<br />";
+
+                pointable.bones.forEach( function(bone){
+                            
+                    for (var i= 0; i < frame.hands.length; i++) {
+
+                        /* config frames of the hand and dimension of the screen
+                        */
+
+                        var hand  = frame.hands[i];
+                        var width = document.all[0].clientWidth;
+                        var height= document.all[0].clientHeight*2;
+                        var spaceHand= 2;
+
+                        /* button back
+                        */
+
+                        var back= document.getElementById('btnBack');
+                        posXBack= parseInt(back.style.left.replace('px', ''));
+                        posYBack= parseInt(back.style.top.replace('px', ''));
+                        back.style.left= (width/7)-(back.clientWidth/2)+'px';
+                        back.style.top = (height/9)-(back.clientHeight/2)+'px';
+                        back.style.display= 'block';
+
+                        /* finger index to select
+                        */
+                        var finger2 = document.getElementById("finger2");
+                
+                        if('Index finger' == fingerTypeMap[pointable.type]){   
+                            var posX= ((pointable.tipPosition[0]*spaceHand)+(width/2));
+                            var posY= ((height/2)-(pointable.tipPosition[1]*spaceHand));
+
+                            finger2.style.top  = posY + "px";
+                            finger2.style.left = posX + "px";
+
+                            /* dimension area button back
+                            */
+                            
+                            if(posX >= posXBack && posX <= posXBack+back.clientWidth){
+                                if(posY >= posYBack && posY <= posYBack+back.clientHeight){
+                                    var secondsVisible= pointable.timeVisible;
+                                    if(pointable.touchZone == "touching") {
+                                        window.location.href= 'menu.html';
+                                    }
+                                    back.style.background= 'purple';
+                                }
+                            }else{
+                                back.style.background= 'gold';
+                            }
+                        }
+
+                        /*
+                        alfabeto part 1
+                        */
+
+                        var btnA = document.getElementById("btnA");
+                        btnA.style.left= width/7.5+"px";
+                        btnA.style.top= height/6+"px";
+                        btnA.style.display= "block";
+
+                        var btnB = document.getElementById("btnB");
+                        btnB.style.left= width/7.5+btnB.clientWidth+"px";
+                        btnB.style.top= height/6+"px";
+                        btnB.style.display= "block";
+
+                        var btnC = document.getElementById("btnC");
+                        btnC.style.left= width/7.5+btnB.clientWidth*2+"px";
+                        btnC.style.top= height/6+"px";
+                        btnC.style.display= "block";
+
+                        var btnD = document.getElementById("btnD");
+                        btnD.style.left= width/7.5+btnB.clientWidth*3+"px";
+                        btnD.style.top= height/6+"px";
+                        btnD.style.display= "block";
+
+                        var btnE = document.getElementById("btnE");
+                        btnE.style.left= width/7.5+btnB.clientWidth*4+"px";
+                        btnE.style.top= height/6+"px";
+                        btnE.style.display= "block";
+
+                        var btnF = document.getElementById("btnF");
+                        btnF.style.left= width/7.5+btnB.clientWidth*5+"px";
+                        btnF.style.top= height/6+"px";
+                        btnF.style.display= "block";
+
+                        var btnG = document.getElementById("btnG");
+                        btnG.style.left= width/7.5+btnB.clientWidth*6+"px";
+                        btnG.style.top= height/6+"px";
+                        btnG.style.display= "block";
+
+                        var btnH = document.getElementById("btnH");
+                        btnH.style.left= width/7.5+btnB.clientWidth*7+"px";
+                        btnH.style.top= height/6+"px";
+                        btnH.style.display= "block";
+
+                        var btnI = document.getElementById("btnI");
+                        btnI.style.left= width/7.5+btnB.clientWidth*8+"px";
+                        btnI.style.top= height/6+"px";
+                        btnI.style.display= "block";
+
+                        var btnJ = document.getElementById("btnJ");
+                        btnJ.style.left= width/7.5+btnB.clientWidth*9+"px";
+                        btnJ.style.top= height/6+"px";
+                        btnJ.style.display= "block";
+
+                        var btnK = document.getElementById("btnK");
+                        btnK.style.left= width/7.5+btnB.clientWidth*10+"px";
+                        btnK.style.top= height/6+"px";
+                        btnK.style.display= "block";
+
+                        var btnL = document.getElementById("btnL");
+                        btnL.style.left= width/7.5+btnB.clientWidth*11+"px";
+                        btnL.style.top= height/6+"px";
+                        btnL.style.display= "block";
+
+                        var btnM = document.getElementById("btnM");
+                        btnM.style.left= width/7.5+btnB.clientWidth*12+"px";
+                        btnM.style.top= height/6+"px";
+                        btnM.style.display= "block";
+
+                        /*
+                        alfabeto part 2
+                        */
+
+                        var btnN = document.getElementById("btnN");
+                        btnN.style.left= width/7.5+"px";
+                        btnN.style.top= height/5+"px";
+                        btnN.style.display= "block";
+
+                        var btnO = document.getElementById("btnO");
+                        btnO.style.left= width/7.5+btnO.clientWidth+"px";
+                        btnO.style.top= height/5+"px";
+                        btnO.style.display= "block";
+
+                        var btnP = document.getElementById("btnP");
+                        btnP.style.left= width/7.5+btnP.clientWidth*2+"px";
+                        btnP.style.top= height/5+"px";
+                        btnP.style.display= "block";
+
+                        var btnQ = document.getElementById("btnQ");
+                        btnQ.style.left= width/7.5+btnQ.clientWidth*3+"px";
+                        btnQ.style.top= height/5+"px";
+                        btnQ.style.display= "block";
+
+                        var btnR = document.getElementById("btnR");
+                        btnR.style.left= width/7.5+btnR.clientWidth*4+"px";
+                        btnR.style.top= height/5+"px";
+                        btnR.style.display= "block";
+
+                        var btnS = document.getElementById("btnS");
+                        btnS.style.left= width/7.5+btnS.clientWidth*5+"px";
+                        btnS.style.top= height/5+"px";
+                        btnS.style.display= "block";
+
+                        var btnT = document.getElementById("btnT");
+                        btnT.style.left= width/7.5+btnT.clientWidth*6+"px";
+                        btnT.style.top= height/5+"px";
+                        btnT.style.display= "block";
+
+                        var btnU = document.getElementById("btnU");
+                        btnU.style.left= width/7.5+btnU.clientWidth*7+"px";
+                        btnU.style.top= height/5+"px";
+                        btnU.style.display= "block";
+
+                        var btnV = document.getElementById("btnV");
+                        btnV.style.left= width/7.5+btnV.clientWidth*8+"px";
+                        btnV.style.top= height/5+"px";
+                        btnV.style.display= "block";
+
+                        var btnX = document.getElementById("btnX");
+                        btnX.style.left= width/7.5+btnX.clientWidth*9+"px";
+                        btnX.style.top= height/5+"px";
+                        btnX.style.display= "block";
+
+                        var btnW = document.getElementById("btnW");
+                        btnW.style.left= width/7.5+btnW.clientWidth*10+"px";
+                        btnW.style.top= height/5+"px";
+                        btnW.style.display= "block";
+
+                        var btnY = document.getElementById("btnY");
+                        btnY.style.left= width/7.5+btnY.clientWidth*11+"px";
+                        btnY.style.top= height/5+"px";
+                        btnY.style.display= "block";
+
+                        var btnZ = document.getElementById("btnZ");
+                        btnZ.style.left= width/7.5+btnZ.clientWidth*12+"px";
+                        btnZ.style.top= height/5+"px";
+                        btnZ.style.display= "block";
+
+                        /*
+                        numbers
+                        */
+
+                        var btn0 = document.getElementById("btn0");
+                        btn0.style.left= width/6+btn0.clientWidth+"px";
+                        btn0.style.top= height/3.5+"px";
+                        btn0.style.display= "block";
+
+                        var btn1 = document.getElementById("btn1");
+                        btn1.style.left= width/6+btn1.clientWidth*2+"px";
+                        btn1.style.top= height/3.5+"px";
+                        btn1.style.display= "block";
+
+                        var btn2 = document.getElementById("btn2");
+                        btn2.style.left= width/6+btn2.clientWidth*3+"px";
+                        btn2.style.top= height/3.5+"px";
+                        btn2.style.display= "block";
+
+                        var btn3 = document.getElementById("btn3");
+                        btn3.style.left= width/6+btn3.clientWidth*4+"px";
+                        btn3.style.top= height/3.5+"px";
+                        btn3.style.display= "block";
+
+                        var btn4 = document.getElementById("btn4");
+                        btn4.style.left= width/6+btn4.clientWidth*5+"px";
+                        btn4.style.top= height/3.5+"px";
+                        btn4.style.display= "block";
+
+                        var btn5 = document.getElementById("btn5");
+                        btn5.style.left= width/6+btn5.clientWidth*6+"px";
+                        btn5.style.top= height/3.5+"px";
+                        btn5.style.display= "block";
+
+                        var btn6 = document.getElementById("btn6");
+                        btn6.style.left= width/6+btn6.clientWidth*7+"px";
+                        btn6.style.top= height/3.5+"px";
+                        btn6.style.display= "block";
+
+                        var btn7 = document.getElementById("btn7");
+                        btn7.style.left= width/6+btn7.clientWidth*8+"px";
+                        btn7.style.top= height/3.5+"px";
+                        btn7.style.display= "block";
+
+                        var btn8 = document.getElementById("btn8");
+                        btn8.style.left= width/6+btn8.clientWidth*9+"px";
+                        btn8.style.top= height/3.5+"px";
+                        btn8.style.display= "block";
+
+                        var btn9 = document.getElementById("btn9");
+                        btn9.style.left= width/6+btn9.clientWidth*10+"px";
+                        btn9.style.top= height/3.5+"px";
+                        btn9.style.display= "block";
+
+                        /*
+                        saudacoes
+                        */
+
+                        var btnOi = document.getElementById("btnOi");
+                        btnOi.style.left= width/5+btnOi.clientWidth+"px";
+                        btnOi.style.top= height/2.6+"px";
+                        btnOi.style.display= "block";
+
+                        var btnTudoBem = document.getElementById("btnTudoBem");
+                        btnTudoBem.style.left= width/5+btnTudoBem.clientWidth*2+"px";
+                        btnTudoBem.style.top= height/2.6+"px";
+                        btnTudoBem.style.display= "block";
+
+                        var btnBomDia = document.getElementById("btnBomDia");
+                        btnBomDia.style.left= width/5+btnBomDia.clientWidth*3+"px";
+                        btnBomDia.style.top= height/2.6+"px";
+                        btnBomDia.style.display= "block";
+
+                        var btnBoaTarde = document.getElementById("btnBoaTarde");
+                        btnBoaTarde.style.left= width/5+btnBoaTarde.clientWidth*4+"px";
+                        btnBoaTarde.style.top= height/2.6+"px";
+                        btnBoaTarde.style.display= "block";
+
+                        /*
+                        selected options A
+                        */
+
+                        posX= parseInt(finger2.style.left.replace('px', ''));
+                        posY= parseInt(finger2.style.top.replace('px', ''));
+
+                        posXA= parseInt(btnA.style.left.replace('px', ''));
+                        posYA= parseInt(btnA.style.top.replace('px', ''));
+
+                        if(posX >= posXA && posX <= posXA+btnA.clientWidth){
+                            if(posY >= posYA && posY <= posYA+btnA.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-A.html';
+                                }
+                                btnA.style.background= 'purple';
+                            }
+                        }else{
+                            btnA.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options B
+                        */
+
+                        posXB= parseInt(btnB.style.left.replace('px', ''));
+                        posYB= parseInt(btnB.style.top.replace('px', ''));
+
+                        if(posX >= posXB && posX <= posXB+btnB.clientWidth){
+                            if(posY >= posYB && posY <= posYB+btnB.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-B.html';
+                                }
+                                btnB.style.background= 'purple';
+                            }
+                        }else{
+                            btnB.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options C
+                        */
+
+                        posXC= parseInt(btnC.style.left.replace('px', ''));
+                        posYC= parseInt(btnC.style.top.replace('px', ''));
+
+                        if(posX >= posXC && posX <= posXC+btnC.clientWidth){
+                            if(posY >= posYC && posY <= posYC+btnC.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-C.html';
+                                }
+                                btnC.style.background= 'purple';
+                            }
+                        }else{
+                            btnC.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options D
+                        */
+
+                        posXD= parseInt(btnD.style.left.replace('px', ''));
+                        posYD= parseInt(btnD.style.top.replace('px', ''));
+
+                        if(posX >= posXD && posX <= posXD+btnD.clientWidth){
+                            if(posY >= posYD && posY <= posYD+btnD.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-D.html';
+                                }
+                                btnD.style.background= 'purple';
+                            }
+                        }else{
+                            btnD.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options E
+                        */
+
+                        posXE= parseInt(btnE.style.left.replace('px', ''));
+                        posYE= parseInt(btnE.style.top.replace('px', ''));
+
+                        if(posX >= posXE && posX <= posXE+btnE.clientWidth){
+                            if(posY >= posYE && posY <= posYE+btnE.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-E.html';
+                                }
+                                btnE.style.background= 'purple';
+                            }
+                        }else{
+                            btnE.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options F
+                        */
+
+                        posXF= parseInt(btnF.style.left.replace('px', ''));
+                        posYF= parseInt(btnF.style.top.replace('px', ''));
+
+                        if(posX >= posXF && posX <= posXF+btnF.clientWidth){
+                            if(posY >= posYF && posY <= posYF+btnF.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-F.html';
+                                }
+                                btnF.style.background= 'purple';
+                            }
+                        }else{
+                            btnF.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options G
+                        */
+
+                        posXG= parseInt(btnG.style.left.replace('px', ''));
+                        posYG= parseInt(btnG.style.top.replace('px', ''));
+
+                        if(posX >= posXG && posX <= posXG+btnG.clientWidth){
+                            if(posY >= posYG && posY <= posYG+btnG.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-G.html';
+                                }
+                                btnG.style.background= 'purple';
+                            }
+                        }else{
+                            btnG.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options H
+                        */
+
+                        posXH= parseInt(btnH.style.left.replace('px', ''));
+                        posYH= parseInt(btnH.style.top.replace('px', ''));
+
+                        if(posX >= posXH && posX <= posXH+btnH.clientWidth){
+                            if(posY >= posYH && posY <= posYH+btnH.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-H.html';
+                                }
+                                btnH.style.background= 'purple';
+                            }
+                        }else{
+                            btnH.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options I
+                        */
+
+                        posXI= parseInt(btnI.style.left.replace('px', ''));
+                        posYI= parseInt(btnI.style.top.replace('px', ''));
+
+                        if(posX >= posXI && posX <= posXI+btnI.clientWidth){
+                            if(posY >= posYI && posY <= posYI+btnI.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-I.html';
+                                }
+                                btnI.style.background= 'purple';
+                            }
+                        }else{
+                            btnI.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options J
+                        */
+
+                        posXJ= parseInt(btnJ.style.left.replace('px', ''));
+                        posYJ= parseInt(btnJ.style.top.replace('px', ''));
+
+                        if(posX >= posXJ && posX <= posXJ+btnJ.clientWidth){
+                            if(posY >= posYJ && posY <= posYJ+btnJ.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-J.html';
+                                }
+                                btnJ.style.background= 'purple';
+                            }
+                        }else{
+                            btnJ.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options K
+                        */
+
+                        posXK= parseInt(btnK.style.left.replace('px', ''));
+                        posYK= parseInt(btnK.style.top.replace('px', ''));
+
+                        if(posX >= posXK && posX <= posXK+btnK.clientWidth){
+                            if(posY >= posYK && posY <= posYK+btnK.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-K.html';
+                                }
+                                btnK.style.background= 'purple';
+                            }
+                        }else{
+                            btnK.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options L
+                        */
+
+                        posXL= parseInt(btnL.style.left.replace('px', ''));
+                        posYL= parseInt(btnL.style.top.replace('px', ''));
+
+                        if(posX >= posXL && posX <= posXL+btnL.clientWidth){
+                            if(posY >= posYL && posY <= posYL+btnL.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-L.html';
+                                }
+                                btnL.style.background= 'purple';
+                            }
+                        }else{
+                            btnL.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options M
+                        */
+
+                        posXM= parseInt(btnM.style.left.replace('px', ''));
+                        posYM= parseInt(btnM.style.top.replace('px', ''));
+
+                        if(posX >= posXM && posX <= posXM+btnM.clientWidth){
+                            if(posY >= posYM && posY <= posYM+btnM.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-M.html';
+                                }
+                                btnM.style.background= 'purple';
+                            }
+                        }else{
+                            btnM.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N
+                        */
+
+                        posXN= parseInt(btnN.style.left.replace('px', ''));
+                        posYN= parseInt(btnN.style.top.replace('px', ''));
+
+                        if(posX >= posXN && posX <= posXN+btnN.clientWidth){
+                            if(posY >= posYN && posY <= posYN+btnN.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-N.html';
+                                }
+                                btnN.style.background= 'purple';
+                            }
+                        }else{
+                            btnN.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options O
+                        */
+
+                        posXO= parseInt(btnO.style.left.replace('px', ''));
+                        posYO= parseInt(btnO.style.top.replace('px', ''));
+
+                        if(posX >= posXO && posX <= posXO+btnO.clientWidth){
+                            if(posY >= posYO && posY <= posYO+btnO.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-O.html';
+                                }
+                                btnO.style.background= 'purple';
+                            }
+                        }else{
+                            btnO.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options P
+                        */
+
+                        posXP= parseInt(btnP.style.left.replace('px', ''));
+                        posYP= parseInt(btnP.style.top.replace('px', ''));
+
+                        if(posX >= posXP && posX <= posXP+btnP.clientWidth){
+                            if(posY >= posYP && posY <= posYP+btnP.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-P.html';
+                                }
+                                btnP.style.background= 'purple';
+                            }
+                        }else{
+                            btnP.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options Q
+                        */
+
+                        posXQ= parseInt(btnQ.style.left.replace('px', ''));
+                        posYQ= parseInt(btnQ.style.top.replace('px', ''));
+
+                        if(posX >= posXQ && posX <= posXQ+btnQ.clientWidth){
+                            if(posY >= posYQ && posY <= posYQ+btnQ.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-Q.html';
+                                }
+                                btnQ.style.background= 'purple';
+                            }
+                        }else{
+                            btnQ.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options R
+                        */
+
+                        posXR= parseInt(btnR.style.left.replace('px', ''));
+                        posYR= parseInt(btnR.style.top.replace('px', ''));
+
+                        if(posX >= posXR && posX <= posXR+btnR.clientWidth){
+                            if(posY >= posYR && posY <= posYR+btnR.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-R.html';
+                                }
+                                btnR.style.background= 'purple';
+                            }
+                        }else{
+                            btnR.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options S
+                        */
+
+                        posXS= parseInt(btnS.style.left.replace('px', ''));
+                        posYS= parseInt(btnS.style.top.replace('px', ''));
+
+                        if(posX >= posXS && posX <= posXS+btnS.clientWidth){
+                            if(posY >= posYS && posY <= posYS+btnS.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-S.html';
+                                }
+                                btnS.style.background= 'purple';
+                            }
+                        }else{
+                            btnS.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options T
+                        */
+
+                        posXT= parseInt(btnT.style.left.replace('px', ''));
+                        posYT= parseInt(btnT.style.top.replace('px', ''));
+
+                        if(posX >= posXT && posX <= posXT+btnT.clientWidth){
+                            if(posY >= posYT && posY <= posYT+btnT.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-T.html';
+                                }
+                                btnT.style.background= 'purple';
+                            }
+                        }else{
+                            btnT.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options U
+                        */
+
+                        posXU= parseInt(btnU.style.left.replace('px', ''));
+                        posYU= parseInt(btnU.style.top.replace('px', ''));
+
+                        if(posX >= posXU && posX <= posXU+btnU.clientWidth){
+                            if(posY >= posYU && posY <= posYU+btnU.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-U.html';
+                                }
+                                btnU.style.background= 'purple';
+                            }
+                        }else{
+                            btnU.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options V
+                        */
+
+                        posXV= parseInt(btnV.style.left.replace('px', ''));
+                        posYV= parseInt(btnV.style.top.replace('px', ''));
+
+                        if(posX >= posXV && posX <= posXV+btnV.clientWidth){
+                            if(posY >= posYV && posY <= posYV+btnV.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-V.html';
+                                }
+                                btnV.style.background= 'purple';
+                            }
+                        }else{
+                            btnV.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options X
+                        */
+
+                        posXX= parseInt(btnX.style.left.replace('px', ''));
+                        posYX= parseInt(btnX.style.top.replace('px', ''));
+
+                        if(posX >= posXX && posX <= posXX+btnX.clientWidth){
+                            if(posY >= posYX && posY <= posYX+btnX.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-X.html';
+                                }
+                                btnX.style.background= 'purple';
+                            }
+                        }else{
+                            btnX.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options W
+                        */
+
+                        posXW= parseInt(btnW.style.left.replace('px', ''));
+                        posYW= parseInt(btnW.style.top.replace('px', ''));
+
+                        if(posX >= posXW && posX <= posXW+btnW.clientWidth){
+                            if(posY >= posYW && posY <= posYW+btnW.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-W.html';
+                                }
+                                btnW.style.background= 'purple';
+                            }
+                        }else{
+                            btnW.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options Y
+                        */
+
+                        posXY= parseInt(btnY.style.left.replace('px', ''));
+                        posYY= parseInt(btnY.style.top.replace('px', ''));
+
+                        if(posX >= posXY && posX <= posXY+btnY.clientWidth){
+                            if(posY >= posYY && posY <= posYY+btnY.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-Y.html';                                    
+                                }
+                                btnY.style.background= 'purple';
+                            }
+                        }else{
+                            btnY.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options Z
+                        */
+
+                        posXZ= parseInt(btnZ.style.left.replace('px', ''));
+                        posYZ= parseInt(btnZ.style.top.replace('px', ''));
+
+                        if(posX >= posXZ && posX <= posXZ+btnZ.clientWidth){
+                            if(posY >= posYZ && posY <= posYZ+btnZ.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-alfabeto/reproduce-Z.html';                                    
+                                }
+                                btnZ.style.background= 'purple';
+                            }
+                        }else{
+                            btnZ.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N0
+                        */
+
+                        posX0= parseInt(btn0.style.left.replace('px', ''));
+                        posY0= parseInt(btn0.style.top.replace('px', ''));
+
+                        if(posX >= posX0 && posX <= posX0+btn0.clientWidth){
+                            if(posY >= posY0 && posY <= posY0+btn0.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-numbers/reproduce-n0.html';
+                                }
+                                btn0.style.background= 'purple';
+                            }
+                        }else{
+                            btn0.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N1
+                        */
+
+                        posX1= parseInt(btn1.style.left.replace('px', ''));
+                        posY1= parseInt(btn1.style.top.replace('px', ''));
+
+                        if(posX >= posX1 && posX <= posX1+btn1.clientWidth){
+                            if(posY >= posY1 && posY <= posY1+btn1.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-numbers/reproduce-n1.html';
+                                }
+                                btn1.style.background= 'purple';
+                            }
+                        }else{
+                            btn1.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N2
+                        */
+
+                        posX2= parseInt(btn2.style.left.replace('px', ''));
+                        posY2= parseInt(btn2.style.top.replace('px', ''));
+
+                        if(posX >= posX2 && posX <= posX2+btn2.clientWidth){
+                            if(posY >= posY2 && posY <= posY2+btn2.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-numbers/reproduce-n2.html';
+                                }
+                                btn2.style.background= 'purple';
+                            }
+                        }else{
+                            btn2.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N3
+                        */
+
+                        posX3= parseInt(btn3.style.left.replace('px', ''));
+                        posY3= parseInt(btn3.style.top.replace('px', ''));
+
+                        if(posX >= posX3 && posX <= posX3+btn3.clientWidth){
+                            if(posY >= posY3 && posY <= posY3+btn3.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-numbers/reproduce-n3.html';
+                                }
+                                btn3.style.background= 'purple';
+                            }
+                        }else{
+                            btn3.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N4
+                        */
+
+                        posX4= parseInt(btn4.style.left.replace('px', ''));
+                        posY4= parseInt(btn4.style.top.replace('px', ''));
+
+                        if(posX >= posX4 && posX <= posX4+btn4.clientWidth){
+                            if(posY >= posY3 && posY <= posY4+btn4.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-numbers/reproduce-n4.html';
+                                }
+                                btn4.style.background= 'purple';
+                            }
+                        }else{
+                            btn4.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N5
+                        */
+
+                        posX5= parseInt(btn5.style.left.replace('px', ''));
+                        posY5= parseInt(btn5.style.top.replace('px', ''));
+
+                        if(posX >= posX5 && posX <= posX5+btn5.clientWidth){
+                            if(posY >= posY5 && posY <= posY5+btn5.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-numbers/reproduce-n5.html';
+                                }
+                                btn5.style.background= 'purple';
+                            }
+                        }else{
+                            btn5.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N6
+                        */
+
+                        posX6= parseInt(btn6.style.left.replace('px', ''));
+                        posY6= parseInt(btn6.style.top.replace('px', ''));
+
+                        if(posX >= posX6 && posX <= posX6+btn6.clientWidth){
+                            if(posY >= posY6 && posY <= posY6+btn6.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-numbers/reproduce-n6.html';
+                                }
+                                btn6.style.background= 'purple';
+                            }
+                        }else{
+                            btn6.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N7
+                        */
+
+                        posX7= parseInt(btn7.style.left.replace('px', ''));
+                        posY7= parseInt(btn7.style.top.replace('px', ''));
+
+                        if(posX >= posX7 && posX <= posX7+btn7.clientWidth){
+                            if(posY >= posY7 && posY <= posY7+btn7.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-numbers/reproduce-n7.html';
+                                }
+                                btn7.style.background= 'purple';
+                            }
+                        }else{
+                            btn7.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N8
+                        */
+
+                        posX8= parseInt(btn8.style.left.replace('px', ''));
+                        posY8= parseInt(btn8.style.top.replace('px', ''));
+
+                        if(posX >= posX8 && posX <= posX8+btn8.clientWidth){
+                            if(posY >= posY8 && posY <= posY8+btn8.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-numbers/reproduce-n8.html';
+                                }
+                                btn8.style.background= 'purple';
+                            }
+                        }else{
+                            btn8.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options N9
+                        */
+
+                        posX9= parseInt(btn9.style.left.replace('px', ''));
+                        posY9= parseInt(btn9.style.top.replace('px', ''));
+
+                        if(posX >= posX9 && posX <= posX9+btn9.clientWidth){
+                            if(posY >= posY9 && posY <= posY9+btn9.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-numbers/reproduce-n9.html';
+                                }
+                                btn9.style.background= 'purple';
+                            }
+                        }else{
+                            btn9.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options hello
+                        */
+
+                        posXOi= parseInt(btnOi.style.left.replace('px', ''));
+                        posYOi= parseInt(btnOi.style.top.replace('px', ''));
+
+                        if(posX >= posXOi && posX <= posXOi+btnOi.clientWidth){
+                            if(posY >= posYOi && posY <= posYOi+btnOi.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-saudacoes/reproduce-hello.html';
+                                }
+                                btnOi.style.background= 'purple';
+                            }
+                        }else{
+                            btnOi.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options good (ok)
+                        */
+
+                        posXTudoBem= parseInt(btnTudoBem.style.left.replace('px', ''));
+                        posYTudoBem= parseInt(btnTudoBem.style.top.replace('px', ''));
+
+                        if(posX >= posXTudoBem && posX <= posXTudoBem+btnTudoBem.clientWidth){
+                            if(posY >= posYTudoBem && posY <= posYTudoBem+btnTudoBem.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-saudacoes/afternoon/reproduce-good.html';
+                                }
+                                btnTudoBem.style.background= 'purple';
+                            }
+                        }else{
+                            btnTudoBem.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options (ok) afternoon
+                        */
+
+                        posXBoaTarde= parseInt(btnBoaTarde.style.left.replace('px', ''));
+                        posYBoaTarde= parseInt(btnBoaTarde.style.top.replace('px', ''));
+
+                        if(posX >= posXBoaTarde && posX <= posXBoaTarde+btnBoaTarde.clientWidth){
+                            if(posY >= posYBoaTarde && posY <= posYBoaTarde+btnBoaTarde.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-saudacoes/afternoon/reproduce-afternoon.html';
+                                }
+                                btnBoaTarde.style.background= 'purple';
+                            }
+                        }else{
+                            btnBoaTarde.style.background= 'gold';
+                        }
+
+                        /*
+                        selected options (ok) everything
+                        */
+
+                        posXBomDia= parseInt(btnBomDia.style.left.replace('px', ''));
+                        posYBomDia= parseInt(btnBomDia.style.top.replace('px', ''));
+
+                        if(posX >= posXBomDia && posX <= posXBomDia+btnBomDia.clientWidth){
+                            if(posY >= posYBomDia && posY <= posYBomDia+btnBomDia.clientHeight){
+                                if(pointable.touchZone == "touching") {
+                                    window.location.href= 'gestures-saudacoes/fine/reproduce-everything.html';
+                                }
+                                btnBomDia.style.background= 'purple';
+                            }
+                        }else{
+                            btnBomDia.style.background= 'gold';
+                        }
+
+                    }
+                });
+                pointableString += "</div>";
+            }
+        }
+        }
+        else {
+            pointableString += "<h3 id='msn' style='text-align: center; color: red'>:-) Por Favor Introduza um Movimento (-:</h3>";
+        }
+        pointableOutput.innerHTML = pointableString;
+    
+        // Store frame for motion functions
+        previousFrame = frame;
+    })
+    </script>
+</head>
+<body id="view" class="config">
+    <div id="main">        
+        <div id="pointableData"></div>               
+        <button id='btnBack' class="styleBack" style="display: none;">Voltar</button>
+
+        <button id='btnA' class="btnsOptions">A</button>        
+        <button id='btnB' class="btnsOptions">B</button>   
+        <button id='btnC' class="btnsOptions">C</button>                
+        <button id='btnD' class="btnsOptions">D</button>                
+        <button id='btnE' class="btnsOptions">E</button>        
+        <button id='btnF' class="btnsOptions">F</button>                        
+        <button id='btnG' class="btnsOptions">G</button>                        
+        <button id='btnH' class="btnsOptions">H</button>                        
+        <button id='btnI' class="btnsOptions">I</button>                        
+        <button id='btnJ' class="btnsOptions">J</button>                        
+        <button id='btnK' class="btnsOptions">K</button>                        
+        <button id='btnL' class="btnsOptions">L</button>                        
+        <button id='btnM' class="btnsOptions">M</button>  
+        
+        <button id='btnN' class="btnsOptions">N</button>        
+        <button id='btnO' class="btnsOptions">O</button>   
+        <button id='btnP' class="btnsOptions">P</button>                
+        <button id='btnQ' class="btnsOptions">Q</button>                
+        <button id='btnR' class="btnsOptions">R</button>        
+        <button id='btnS' class="btnsOptions">S</button>                        
+        <button id='btnT' class="btnsOptions">T</button>                        
+        <button id='btnU' class="btnsOptions">U</button>                        
+        <button id='btnV' class="btnsOptions">V</button>                        
+        <button id='btnX' class="btnsOptions">X</button>                        
+        <button id='btnW' class="btnsOptions">W</button>                        
+        <button id='btnY' class="btnsOptions">Y</button>                        
+        <button id='btnZ' class="btnsOptions">Z</button>
+
+        <button id='btn0' class="btnsOptions">0</button>        
+        <button id='btn1' class="btnsOptions">1</button>   
+        <button id='btn2' class="btnsOptions">2</button>                
+        <button id='btn3' class="btnsOptions">3</button>                
+        <button id='btn4' class="btnsOptions">4</button>        
+        <button id='btn5' class="btnsOptions">5</button>                        
+        <button id='btn6' class="btnsOptions">6</button>                        
+        <button id='btn7' class="btnsOptions">7</button>                        
+        <button id='btn8' class="btnsOptions">8</button>                        
+        <button id='btn9' class="btnsOptions">9</button>
+
+        <button id='btnOi' class="btnsOptions" style="width: 120px;">Oi</button>                        
+        <button id='btnTudoBem' class="btnsOptions" style="width: 120px;">Tudo Bem</button>                        
+        <button id='btnBomDia' class="btnsOptions" style="width: 120px;">Bom Dia</button>                        
+        <button id='btnBoaTarde' class="btnsOptions" style="width: 120px;">Boa Tarde</button>
+        
+        <div id="finger2" class="styleFinger"></div>
+    </div>
+</body>
+</html>
+<script>
+    /*
+    config view
+    */
+    var x_view= document.all[0].clientWidth;
+    var y_view= document.all[0].clientHeight;
+    document.getElementById("view").style.backgroundSize= x_view+"px "+y_view+"px";
+</script>
